@@ -53,7 +53,7 @@ public interface ReadOnlyPerson {
             builder.append(" Birthday: ");
             builder.append(getBirthday());
         }
-                builder.append(" Tags: ");
+        builder.append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();
     }
