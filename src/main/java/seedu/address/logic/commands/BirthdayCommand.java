@@ -3,6 +3,9 @@ package seedu.address.logic.commands;
 import java.util.List;
 import java.util.Set;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -17,9 +20,9 @@ import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
+/**
+ * Adds or updates the birthday of a person identified using it's last displayed index from the address book.
+ */
 public class BirthdayCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "birthday";
@@ -43,6 +46,9 @@ public class BirthdayCommand extends UndoableCommand {
         this.birthday = birthday;
     }
 
+    /**
+     * Adds or Updates a Person's birthday
+     */
     private Person updatePersonBirthday(ReadOnlyPerson personToUpdateBirthday, Birthday birthday) {
         Name name = personToUpdateBirthday.getName();
         Phone phone = personToUpdateBirthday.getPhone();
