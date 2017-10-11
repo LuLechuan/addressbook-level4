@@ -37,12 +37,6 @@ public class BirthdayCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void constructor_nullPerson_throwsNullPointerException() {
-        thrown.expect(NullPointerException.class);
-        new BirthdayCommand(null, null);
-    }
-
-    @Test
     public void execute_personAcceptedByModel_updateBirthdaySuccessful() throws Exception {
         Person updatedPerson = new PersonBuilder(model.getFilteredPersonList()
                 .get(INDEX_FIRST_PERSON.getZeroBased())).withBirthday("29/02/1996").build();
