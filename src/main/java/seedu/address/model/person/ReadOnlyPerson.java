@@ -51,7 +51,7 @@ public interface ReadOnlyPerson {
                 .append(getEmail())
                 .append(" Address: ")
                 .append(getAddress());
-        if (!getBirthday().equals("")) {
+        if (!getBirthday().toString().equals("")) {
             builder.append(" Birthday: ");
             builder.append(getBirthday());
         }
