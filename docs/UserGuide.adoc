@@ -132,7 +132,23 @@ Deletes the 2nd person in the address book.
 `delete 1` +
 Deletes the 1st person in the results of the `find` command.
 
-=== Adding/Updating a person's birthday : `birthday`
+=== Deleting a person by his/her full name: `deleteByName`
+
+Deletes the specified person from the address book. +
+Format: `delete String(the person's full name)`
+
+****
+* Deletes the person according to his/her name.
+* The name must be complete
+****
+
+Examples:
+
+* `list` +
+`delete John Doe` +
+Deletes person named John Doe in the address book.
+
+Adding/Updating a person's birthday : `birthday`
 
 Adds or updates an existing person's birthday in the address book. +
 Format: `birthday INDEX [b/Birthday]`
