@@ -44,17 +44,16 @@ public class BirthdayCommandTest {
 
     @Test
     public void execute_personAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingPersonBirthdayChanged modelStub = new ModelStubAcceptingPersonBirthdayChanged();
-        Person validPerson = new PersonBuilder().build();
+        Person updatedPerson = new PersonBuilder().build();
+        Birthday birthday = new Birthday("29/02/1996");
+        BirthdayCommand birthdayCommand = prepareCommand(INDEX_FIRST_PERSON, birthday);
 
-        modelStub.addPersonAndUpdateBirthday(validPerson);
-        Index index = Index.fromZeroBased(0);
-        Birthday birthday = modelStub.getFilteredPersonList().get(0).getBirthday();
+        String expectedMessage = String.format(BirthdayCommand.MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS, updatedPerson);
 
-        CommandResult result = prepareCommand(index, birthday).executeUndoableCommand();
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.updatePerson(model.getFilteredPersonList().get(0), updatedPerson);
 
-        assertEquals(String.format(BirthdayCommand.MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS, validPerson), result.feedbackToUser);
-        //assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
+        assertCommandSuccess(birthdayCommand, model, expectedMessage, expectedModel);
     }
 
     /**
