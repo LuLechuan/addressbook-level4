@@ -11,6 +11,7 @@ import seedu.address.model.tag.Tag;
 import java.util.List;
 import java.util.Set;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 public class BirthdayCommand extends UndoableCommand {
@@ -19,8 +20,10 @@ public class BirthdayCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Updates the person's birthday identified by the index number used in the last person listing.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + "Parameters: "
+            + "INDEX (must be a positive integer)\n"
+            + PREFIX_BIRTHDAY + "BIRTHDAY "
+            + "Example: " + COMMAND_WORD + " 1" + " b/" + "12/02/1993";
 
     public static final String MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS = "Updated Person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
@@ -56,6 +59,7 @@ public class BirthdayCommand extends UndoableCommand {
 
         ReadOnlyPerson personToUpdateBirthday = lastShownList.get(targetIndex.getZeroBased());
         Person personUpdated = updatePersonBirthday(personToUpdateBirthday, birthday);
+        //System.out.println(personUpdated.getBirthday() + " " + personUpdated.getName());
 
         try {
             model.updatePerson(personToUpdateBirthday, personUpdated);
@@ -66,6 +70,6 @@ public class BirthdayCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(String.format(MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS, personToUpdateBirthday));
+        return new CommandResult(String.format(MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS, personUpdated));
     }
 }

@@ -24,7 +24,7 @@ public class BirthdayCommandParser implements Parser<BirthdayCommand> {
         try {
             StringTokenizer st = new StringTokenizer(args);
             Index index = ParserUtil.parseIndex(st.nextToken());
-            Birthday birthday = new Birthday(st.nextToken());
+            Birthday birthday = new Birthday(st.nextToken().substring(2));
             return new BirthdayCommand(index, birthday);
         } catch (IllegalValueException ive) {
             throw new ParseException(
