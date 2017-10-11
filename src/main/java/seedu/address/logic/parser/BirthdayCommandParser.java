@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -24,7 +25,15 @@ public class BirthdayCommandParser implements Parser<BirthdayCommand> {
         try {
             StringTokenizer st = new StringTokenizer(args);
             Index index = ParserUtil.parseIndex(st.nextToken());
-            Birthday birthday = new Birthday(st.nextToken().substring(2));
+            String birthdayInput = st.nextToken();
+            String prefix = birthdayInput.substring(0, 2);
+
+            if (!prefix.equals(PREFIX_BIRTHDAY.getPrefix())) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, BirthdayCommand.MESSAGE_USAGE));
+            }
+
+            Birthday birthday = new Birthday(birthdayInput.substring(2));
             return new BirthdayCommand(index, birthday);
         } catch (IllegalValueException ive) {
             throw new ParseException(
