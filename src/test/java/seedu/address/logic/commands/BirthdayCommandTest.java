@@ -1,12 +1,135 @@
 package seedu.address.logic.commands;
 
+import javafx.collections.ObservableList;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import seedu.address.commons.core.index.Index;
+import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.CommandHistory;
+import seedu.address.logic.UndoRedoStack;
+import seedu.address.model.*;
+import seedu.address.model.person.Birthday;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.testutil.Assert;
+import seedu.address.testutil.PersonBuilder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Predicate;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showFirstPersonOnly;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 public class BirthdayCommandTest {
 
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
-    public void AddressBookParserTest() {
-        new BirthdayCommand();
+    public void constructor_nullPerson_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        new BirthdayCommand(null, null);
+    }
+
+    @Test
+    public void execute_personAcceptedByModel_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonBirthdayChanged modelStub = new ModelStubAcceptingPersonBirthdayChanged();
+        Person validPerson = new PersonBuilder().build();
+
+        modelStub.addPersonAndUpdateBirthday(validPerson);
+        Index index = Index.fromZeroBased(0);
+        Birthday birthday = modelStub.getFilteredPersonList().get(0).getBirthday();
+
+        CommandResult result = prepareCommand(index, birthday).executeUndoableCommand();
+
+        assertEquals(String.format(BirthdayCommand.MESSAGE_UPDATE_PERSON_BIRTHDAY_SUCCESS, validPerson), result.feedbackToUser);
+        //assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
+    }
+
+    /**
+     * Returns a {@code BirthdayCommand} with the parameters {@code index + Birthday}.
+     */
+    private BirthdayCommand prepareCommand(Index index, Birthday birthday) {
+        BirthdayCommand command = new BirthdayCommand(index, birthday);
+        command.setData(model, new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+
+    /**
+     * A default model stub that have all of the methods failing.
+     */
+    private class ModelStub implements Model {
+        @Override
+        public void addPerson(ReadOnlyPerson person) throws DuplicatePersonException {
+            fail("This method should not be called.");
+        }
+
+        public void addPersonAndUpdateBirthday(ReadOnlyPerson person) throws IllegalValueException {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void resetData(ReadOnlyAddressBook newData) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void updatePerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
+                throws DuplicatePersonException {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<ReadOnlyPerson> getFilteredPersonList() {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<ReadOnlyPerson> predicate) {
+            fail("This method should not be called.");
+        }
+    }
+
+    /**
+     * A Model stub that always accept the person being added.
+     */
+    private class ModelStubAcceptingPersonBirthdayChanged extends BirthdayCommandTest.ModelStub {
+        final ArrayList<Person> personsAdded = new ArrayList<>();
+
+        @Override
+        public void addPersonAndUpdateBirthday(ReadOnlyPerson person) throws IllegalValueException {
+            personsAdded.add(new Person(person));
+            Person personToUpdate = personsAdded.get(0);
+            personToUpdate.setBirthday(new Birthday("29/02/1996"));
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            return new AddressBook();
+        }
     }
 
 }
