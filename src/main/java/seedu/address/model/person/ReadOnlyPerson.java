@@ -34,7 +34,9 @@ public interface ReadOnlyPerson {
                 && other.getName().equals(this.getName()) // state checks here onwards
                 && other.getPhone().equals(this.getPhone())
                 && other.getEmail().equals(this.getEmail())
-                && other.getAddress().equals(this.getAddress()));
+                && other.getAddress().equals(this.getAddress()))
+                && other.getBirthday() != null
+                && other.getBirthday().equals(this.getBirthday());
     }
 
     /**
@@ -49,7 +51,7 @@ public interface ReadOnlyPerson {
                 .append(getEmail())
                 .append(" Address: ")
                 .append(getAddress());
-        if (getBirthday() != null) {
+        if (!getBirthday().equals("")) {
             builder.append(" Birthday: ");
             builder.append(getBirthday());
         }

@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.CommandHistory;
@@ -26,7 +27,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
-import javafx.collections.ObservableList;
 import seedu.address.testutil.PersonBuilder;
 
 public class BirthdayCommandTest {
@@ -43,8 +43,10 @@ public class BirthdayCommandTest {
     }
 
     @Test
-    public void execute_personAcceptedByModel_addSuccessful() throws Exception {
-        Person updatedPerson = new PersonBuilder().build();
+    public void execute_personAcceptedByModel_updateBirthdaySuccessful() throws Exception {
+        Person updatedPerson = new PersonBuilder(model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())).withBirthday("29/02/1996").build();
+
         Birthday birthday = new Birthday("29/02/1996");
         BirthdayCommand birthdayCommand = prepareCommand(INDEX_FIRST_PERSON, birthday);
 
