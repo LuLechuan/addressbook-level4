@@ -25,7 +25,7 @@ public class Birthday {
      * @throws IllegalValueException if given address string is invalid.
      */
     public Birthday(String birthdayNum) throws IllegalValueException {
-        requireNonNull(birthdayNum);
+        //requireNonNull(birthdayNum);
         this.value = birthdayNum;
     }
 
