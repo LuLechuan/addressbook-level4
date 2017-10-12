@@ -113,7 +113,7 @@ public class PersonBuilder {
         try {
             this.person.setBirthday(new Birthday(birthday));
         } catch (IllegalValueException ive) {
-            throw new IllegalArgumentException("email is expected to be unique.");
+            throw new IllegalArgumentException("birthday is expected to be in dd/mm/yyyy format.");
         }
         return this;
     }
