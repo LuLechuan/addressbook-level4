@@ -1,123 +1,158 @@
-= Lu Lechuan - Project Portfolio
+= Test Script
+:relfileprefix: team/
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
-:imagesDir: ../images
-:stylesDir: ../stylesheets
+:imagesDir: images
+:stylesDir: stylesheets
 
-== Project: AddressBook - Level 4
-Our Contact Book is an addressbook that strives to serve all the NUS students body.
-Other than some standard operations, it also support some operations that going to be handy for NUS students.
+Welcome to the test script for NUS Contact. We have provided a comprehensive list of test commands for you to try on
+the NUS Contact application, along with their expected output.
 
-*Code contributed*: [https://github.com/CS2103AUG2017-T14-B1/main/blob/master/collated/main/LuLechuan.md[Functional code]]
- [https://github.com/CS2103AUG2017-T14-B1/main/blob/master/collated/test/LuLechuan.md[Test code]]
- [https://github.com/CS2103AUG2017-T14-B1/main/blob/master/collated/unused/LuLechuan.md[Unused code]]
+Feel free to report any bugs to our official reporting channel: bugs@tunedinapp.com
 
-=== Enhancement Added: Photo
+== Getting Started
 
-==== External behavior
+To commence testing for NUS Contact, we have prepared for you sample data for you to load into the application to get going
+right away!
 
----
-#Start of Extract [from: User Guide]#
+Here's how to load the files into the application for testing.
 
-include::../UserGuide.adoc[tag=photo]
+* In your new copy of NUS Contact app, copy the file SampleData.xml (included in this folder) into the data folder in your
+NUS Contact application.
+** If there is no data folder, create one.
+** If there is a addressbook.xml file created, delete them.
 
-#End of Extract#
+Congratulations! You have the sample data loaded and ready to have a try!
 
----
+== Testing
 
-==== Justification
+=== Command Box:
 
-Users might like to have icon photos for their contacts. +
-One reason is that it is easier for users to recognise the contacts. Another reason is that the contact book will have a better appearance with photos.
+==== Help Command
+*Input: help
+*Output: help window is opened
 
-==== Implementation
+==== Add Command
+*Input: add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01
+*Output: New person added ..
 
----
-#Start of Extract [from: Developer Guide]#
+*Input: add n/John Doe
+*Output: Invalid command format! ..
 
-include::../DeveloperGuide.adoc[tag=photo]
+*Input: add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01
+*Output: This person already exists in the Contact Book.
 
-#End of Extract#
+*Input: clear
+       add n/John Doe p/98765432 e/ a/
+*Output: Contact Book has been cleared!
+        New person added ..
 
----
+==== List Command
+*Input: list
+*Output: Listed all persons
 
-=== Enhancement Added: Custom Field
+==== Edit Command
+*Input: edit 1 p/91234567 e/johndoe@example.com
+*Output: Edited Persons at the following indices: [1]
 
-==== External behavior
+*Input: edit 1 2 t/best -t/worst
+*Output: Edited Persons at the following indices: [1, 2]
 
----
-#Start of Extract [from: User Guide]#
+==== Detele Command
+*Input: delete 2
+*Output: Deleted Person .. (The 2nd person in the contact book is deleted)
 
-include::../UserGuide.adoc[tag=customField]
+*Input: delete 0
+*Output: Invalid command format! ..
 
-#End of Extract#
+==== DeleteByName Command
+*Input: deleteByName John Doe
+*Output: Deleted Person .. (Person named John Doe is deleted)
 
----
+*Input: deleteByName InvalidName
+*Output: The person's name is not found
 
-==== Justification
+==== Select Command
+*Input: select 1
+*Output: Selected Person: 1
 
-Different students have their own custom fields such a nick name, courses etc. which is not exhaustive. +
-Therefore, this feature is designed for users to add as many custom fields for each contact as they want so that they can customise each contact.
+*Input: select -1
+*Output: Invalid command format! ..
 
-==== Implementation
+==== Custom Command
+*Input: custom 1 NickName Ahchuang
+*Output: Updated Person ..(NickName field with value Ahchuang is created for the 1st person)
 
----
-#Start of Extract [from: Developer Guide]#
+*Input: custom 1 NickName
+*Output: Updated Person .. (NickName field of the 1st person is removed)
 
-include::../DeveloperGuide.adoc[tag=customField]
+*Input: custom Age 21
+*Output: Invalid command format! ..
 
-#End of Extract#
+==== Upload Photo Command
+*Input: upload 1 D:\Git Projects\wolf.jpg
+*Output: Updated Person .. (photo is added for 1st person)
 
----
+*Input: upload 1 invalidPath
+*Output: The path to the image is not found
 
-==== Implementation
+==== Update Phone Command
+*Input: updatePhone 1 add 83608688
+*Output: Updated Person ..(success)
 
----
-#Start of Extract [from: Developer Guide]#
+*Input: updatePhone 1 add 83608688
+*Output: (fail due to duplicate)
 
-include::../DeveloperGuide.adoc[tag=customField]
+*Input: updatePhone byName add 83060774 Alex Yeoh
+*Output: Updated Person ..(success)
 
-#End of Extract#
+*Input: updatePhone 1 remove 83608688
+*Output: Updated Person .. (success)
 
----
+*Input: updatePhone 1 remove 86666666
+*Output: (failure due to PhoneNotFound)
 
-=== Enhancement Added: DeleteByName
+*Input: updatePhone 1 adddd 83608688
+*Output: Invalid command format! ..
 
-==== External behavior
+*Input: updatePhone -1 add 83608688
+*Output: (failure due to invalid index)
 
----
-#Start of Extract [from: User Guide]#
+*Input: updatePhone 1 add 83608-688
+*Output: (failure due to invalid phone)
 
-include::../UserGuide.adoc[tag=deleteByName]
+*Input: updatePhone 1 add 83
+*Output: (failure due to invalid phone, must be at least 3 digits)
 
-#End of Extract#
+*Input: updatePhone byName add 8897768 Alex Yeo
+*Output: (failure since not full name)
 
----
+*Input: updatePhone byname add 83608688 Alex Yeoh
+*Output: (failure due to invalid command)
 
-==== Justification
+==== Undo/Redo Command
+*Input: undo
+*Output: Undo success!
 
-When there is a lot of contacts in the contact book, it will be easier for users to locate a particular contact by the name and delete it directly, as compared to finding the index of the contact in the long list. +
-In this case, when deleting a person, the user only need to type `delete John Doe` and the person named John Doe will be deleted.
+*Input: redo
+*Output: Redo success!
 
-==== Implementation
+==== Exit
+*Input: exit
+*Output: (Contact Book is closed)
 
----
-#Start of Extract [from: Developer Guide]#
+=== Search Box:
 
-include::../DeveloperGuide.adoc[tag=deleteByName]
+*Input: John
+*Displays john and Johnson
 
-#End of Extract#
+*Input: Betsy Tim John
+*Displays persons who have ALL prefixes Betsy, Tim, and John in ANY part of their names
 
----
+*Input: 8269
+*Displays persons having 8269 as a prefix of his/her phone numbers
 
-=== Enhancement Proposed: Add command `Background`
+*Input: friends
+*Displays all persons tagged as friends
 
-The Background command will allow users to add a background image for the Contact Book. +
-This command would allow users to customise their Contact Book to have an appearance that they desire.
-
-=== Other contributions
-
-* Allow Storage for all new fields for the team (Pull requests https://github.com/CS2103AUG2017-T14-B1/main/pull/59)
-* Add a default background image for the Contact Book (Pull requests https://github.com/CS2103AUG2017-T14-B1/main/pull/79)
-* Write Test Script for the Team to test the product
-* Add acceptance test for other groups (Issues https://github.com/CS2103AUG2017-F10-B1/main/issues/119)
-
+== Thank You!
+Thank you for using NUS Contact!
