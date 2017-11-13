@@ -57,7 +57,7 @@ Congratulations! You have the sample data loaded and ready to have a try!
 *Input: edit 1 2 t/best -t/worst +
 *Output: Edited Persons at the following indices: [1, 2]
 
-==== Detele Command
+==== Delete Command
 *Input: delete 2 +
 *Output: Deleted Person .. (The 2nd person in the contact book is deleted)
 
